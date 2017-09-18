@@ -15,13 +15,6 @@ class Cypher(object):
     def setAlphabet(self, abc):
         self.alphabet = abc
 
-    # ===== Getters =====
-    def getKey(self):
-        return self.key
-
-    def getAlphabet(self):
-        return self.alphabet
-
     # ===== Methods =====
     def encode(self, str):
         result = ""
@@ -71,12 +64,50 @@ class Cypher(object):
 
         return self.alphabet[shiftedValue]
 
-def test():
+    def encode_file(self, file_location, file_destination = None):
+
+        if file_destination == None:
+            with open(file_location, 'r') as read_file:
+                data = read_file.readlines()
+            for line in data:
+                print(self.encode(line[:-1]), 'encoded')
+                print(self.decode(self.encode(line[:-1])), 're-decoded')
+        else:
+            with open(file_location, 'r') as read_file:
+                data = read_file.readlines()
+
+            with open(file_destination, 'w') as write_file:
+                for line in data:
+                    print("writing...", self.encode(line[:-1]))
+                    write_file.write(self.encode(line))
+                    write_file.flush()
+
+    def decode_file(self, file_location, file_destination = None):
+        data = None
+
+        if file_destination == None:
+            with open(file_location, 'r') as read_file:
+                data = read_file.readlines()
+            for line in data:
+                print(self.decode(line[:-1]))
+        else:
+            with open(file_location, 'r') as read_file:
+                data = read_file.readlines()
+            with open(file_destination, 'w') as write_file:
+                for line in data:
+                    write_file.write(self.decode(line))
+                    write_file.flush()
+
+def main():
     df = pd.read_csv('~/.c/cyphers.csv')
 
-    print(df)
+    test_cypher = Cypher(list(df['key'])[0], list(df['alphabet'])[0])
 
-    test_cypher = Cypher("iamthedanger", "6aA7!bB8@cC9#dD$eE%fF^gG&hH*iI(jJ)kK-lL=mM_nN+oO,pP.qQ'rR;sS:tT/uU0vV1wW2xX3yY4zZ5")
+    print(test_cypher.encode("This is a test.  Does the cypher's encoding work properly?"), "encoding test")
+    print(test_cypher.decode(test_cypher.encode("This is a test.  Does the cypher's decoding work properly?")), "decoding test")
+
+    test_cypher.encode_file('../../../.c/users-encoded.csv', '../../../.c/users.csv')
+    test_cypher.decode_file('../../../.c/users.csv')
 
 if __name__ == "__main__":
-    test()
+    main()
