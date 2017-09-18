@@ -1,7 +1,7 @@
 from Cypher import Cypher
+from TaskManager import TaskManager
 import pandas as pd
-import time
-import os
+import time, os, sys
 
 current_directory = '/home/durzo/PycharmProjects/Journal/'
 
@@ -10,7 +10,7 @@ class Journal(object):
         self.cypher = self.build_cypher()
         self.decode_config_files(config_folder)
         self.username, self.password = self.prove_credentials()
-        self.menu()
+        self.task_manager = TaskManager(self)
         self.close()
 
     def decode_config_files(self, config_folder):
@@ -45,21 +45,9 @@ class Journal(object):
             else:
                 print("Username and password not found.")
 
-
-    def menu(self):
-        print("==================================================")
-        print(" Welcome. ")
-        print("==================================================")
-
-        while True:
-            print("================== Menu ======================")
-            print(" 1 ) Store raw entries ")
-            print(" 2 ) Get old entries ")
-            print(" 3 ) Quit ")
-            input(" What would you like to do? ")
-
     def close(self):
         self.remove_config_files()
+        sys.exit(0)
 
 def main():
     test_journal = Journal('../../../.c/')
