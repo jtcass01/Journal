@@ -1,5 +1,6 @@
 from Cypher import Cypher
 from TaskManager import TaskManager
+from FileHandler import FileHandler
 import pandas as pd
 import time, os, sys
 
@@ -10,6 +11,7 @@ class Journal(object):
         self.cypher = self.build_cypher()
         self.decode_config_files(config_folder)
         self.username, self.password = self.prove_credentials()
+        self.file_handler = FileHandler(log_folder = "log", raw_entry_folder = "raw_entries")
         self.task_manager = TaskManager(self)
         self.close()
 

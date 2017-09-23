@@ -1,5 +1,7 @@
 import glob, os
 
+from FileHandler import FileHandler
+
 class TaskManager(object):
     def __init__(self, Journal):
         self.journal = Journal
@@ -28,8 +30,10 @@ class TaskManager(object):
 
     def store_raw_entries(self):
         os.chdir("../raw_entries")
-        for file in glob.glob("*.txt"):
-            print(file)
+
+        for entry in glob.glob("*.txt"):
+            data = FileHandler().get_file_data(file_location=entry)
+            FileHandler().save_and_encode(file_location=entry, journal=self.journal, data=data)
 
     def print_error(self):
         print('invalid input')
